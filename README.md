@@ -56,3 +56,6 @@ OOBOT
 ''' 如何生成结构树
 在文件夹中输入 tree /f > list.txt 即可
 '''
+
+## 需求
+    send_private_msg delete_msg send_like     set_friend_add_request set_group_ban set_group_whole_ban     get_image     get_record     upload_group_file send_group_forward_msg send_private_forward_msg

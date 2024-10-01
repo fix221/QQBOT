@@ -1,0 +1,11 @@
+# AI配置
+AI_api_key: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+AI_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"  # 使用阿里百炼API
+
+# Q群配置
+root: "123456789" # 机器人管理员QQ(仅一个)
+group: "123456789"  # 机器人该响应的QQ群(多个)
+
+# Bot连接设置
+bot_url: "http://127.0.0.1"
+bot_port: 5700
