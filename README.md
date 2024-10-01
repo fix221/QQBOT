@@ -4,8 +4,8 @@ SM腾讯的接口和各大AI接口对接
 ## 编辑守则
 - 高度可控
 - 写明对称
-- 使用LLOnebot接口，请查阅官方文档
 - 写明注释
+- 使用LLOnebot接口，请查阅官方文档
 - 可提供的传入数据： {text} {group_id} {user_id} {message_id} {raw_message} {message_type}
 
 
