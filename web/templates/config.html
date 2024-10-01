@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配置中心</title>
+    <title>AI配置中心</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,45 +35,12 @@
             margin-bottom: 15px;
             font-size: 14px;
         }
-        .config-item input[type="text"] {
-            width: 100px;
+        .config-item input[type="text"], .config-item input[type="number"] {
+            width: 250px;
             padding: 5px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
-        }
-        .config-item input[type="checkbox"] {
-            width: 40px;
-            height: 20px;
-            -webkit-appearance: none;
-            background-color: #ddd;
-            outline: none;
-            border-radius: 20px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            transition: 0.3s;
-            position: relative;
-        }
-        .config-item input[type="checkbox"]:checked {
-            background-color: #4cd964;
-        }
-        .config-item input[type="checkbox"]::before {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            top: 0;
-            left: 0;
-            background-color: #fff;
-            transform: scale(1.1);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: 0.3s;
-        }
-        .config-item input[type="checkbox"]:checked::before {
-            left: 20px;
-        }
-        .green-text {
-            color: #4cd964;
         }
         .buttons {
             display: flex;
@@ -97,62 +64,82 @@
             color: #333;
             border: 1px solid #ddd;
         }
-        .arrow-right::before {
-            content: '▶';
-            margin-right: 5px;
-            color: #666;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>欢迎使用配置中心</h1>
-        <div class="config-item">
-            <label>
-                <input type="checkbox" checked>
-                配置 Nonebot 监听的端口
-            </label>
-            <span class="green-text">8080</span>
-        </div>
-        <div class="config-item">
-            <span>PORT</span>
-            <input type="text" value="8080">
-        </div>
-        <div class="config-item">
-            <span class="arrow-right">配置 Nonebot 监听的 IP 地址</span>
-            <span class="green-text">127.0.0.1</span>
-        </div>
-        <div class="config-item">
-            <span>超级用户</span>
-            <input type="text" value="1925019494">
-        </div>
-        <div class="config-item">
-            <span>是否将所有的管理员视为超级用户</span>
-            <input type="checkbox">
-        </div>
-        <div class="config-item">
-            <span>指令分隔符</span>
-            <input type="text">
-        </div>
-        <div class="config-item">
-            <span>指令起始字符</span>
-            <input type="text">
-        </div>
-        <div class="config-item">
-            <span>日志输出等级</span>
-            <span class="green-text">INFO</span>
-        </div>
-        <div class="config-item">
-            <span class="arrow-right">密钥</span>
-        </div>
-        <div class="config-item">
-            <span class="arrow-right">机器人平台的 AccessToken</span>
-        </div>
-        <div class="buttons">
-            <button>恢复默认</button>
-            <button>获取原始配置</button>
-            <button>保存一下</button>
-        </div>
+        <h1>AI配置中心</h1>
+        <form id="configForm">
+            <div class="config-item">
+                <span>AI API Key:</span>
+                <input type="text" name="AI_api_key" value="{{ config.AI_api_key }}">
+            </div>
+            <div class="config-item">
+                <span>AI URL:</span>
+                <input type="text" name="AI_url" value="{{ config.AI_url }}">
+            </div>
+            <div class="config-item">
+                <span>机器人管理员QQ:</span>
+                <input type="text" name="root" value="{{ config.root }}">
+            </div>
+            <div class="config-item">
+                <span>机器人响应的QQ群:</span>
+                <input type="text" name="group" value="{{ config.group }}">
+            </div>
+            <div class="config-item">
+                <span>Bot URL:</span>
+                <input type="text" name="bot_url" value="{{ config.bot_url }}">
+            </div>
+            <div class="config-item">
+                <span>Bot Port:</span>
+                <input type="number" name="bot_port" value="{{ config.bot_port }}">
+            </div>
+            <div class="buttons">
+                <button type="button" id="resetButton">恢复默认</button>
+                <button type="submit">保存配置</button>
+            </div>
+        </form>
     </div>
+    <script>
+        document.getElementById('configForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/save_config', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('配置已保存');
+                } else {
+                    alert('保存失败: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('保存失败，请查看控制台了解详情');
+            });
+        });
+
+        document.getElementById('resetButton').addEventListener('click', function() {
+            if (confirm('确定要恢复默认设置吗？')) {
+                fetch('/reset_config', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('已恢复默认设置');
+                        location.reload();
+                    } else {
+                        alert('恢复失败: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('恢复失败，请查看控制台了解详情');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

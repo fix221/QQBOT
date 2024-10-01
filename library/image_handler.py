@@ -11,7 +11,7 @@ def get_temp_image_path():
     temp_dir = os.path.join(os.path.dirname(__file__), "tmp")
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
-    return os.path.join(temp_dir, "temp_image.jpg")
+    return os.path.join(temp_dir, "temp_image.png")
 
 def get_random_image():
     url = "https://t.mwm.moe/mp"
@@ -30,7 +30,7 @@ def resize_image_proportionally(image, base_width):
     return image.resize((base_width, new_height), Image.Resampling.LANCZOS)
 
 def create_image(text, background_url=None):
-    font_path = 'G:\\桌面\\BOT\\library\\font\\Fort_1.ttf'
+    font_path = 'library/font/Fort_1.ttf'
     font_size = 20
     try:
         font = ImageFont.truetype(font_path, font_size)
@@ -60,7 +60,7 @@ def create_image(text, background_url=None):
         current_height += font_size + line_spacing
     combined_image = Image.alpha_composite(background_image, text_image)
     timestamp = time.strftime("%Y-%m-%d-%H.%M.%S")
-    filename = f"G:\\桌面\\BOT\\tmp\\{timestamp}.png"
+    filename = f"tmp/{timestamp}.png"
     combined_image.save(filename)
     print(f"Image saved to {filename}")
     return filename

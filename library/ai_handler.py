@@ -1,10 +1,14 @@
 import logging
-import httpx
 from openai import OpenAI
+import yaml
+
+# 读取配置文件
+with open("config/main.yml", "r") as file:
+    config = yaml.safe_load(file)
 
 client = OpenAI(
-    api_key="sk-8882a4f31dc04aafac5779735cb946d6",
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+    api_key=config["AI_api_key"],
+    base_url=config["AI_url"]
 )
 
 async def call_ai_api(input_text: str):
