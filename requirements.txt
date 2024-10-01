@@ -1,0 +1,6 @@
+uvicorn
+httpx
+requests
+Pillow
+fastapi
+openai
