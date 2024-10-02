@@ -1,13 +1,12 @@
-from fastapi import APIRouter, Request
+from fastapi import FastAPI, Request
 from logger import setup_logging
 from ai_handler import call_ai_api
 from onebot_handler import send_image_to_onebot, send_get_request
 from image_handler import create_image
+import uvicorn
+import yaml
 import requests
 import os
-import yaml
-
-router = APIRouter()
 
 # 加载配置文件
 def load_config():
@@ -17,16 +16,18 @@ def load_config():
 config = load_config()
 
 logging = setup_logging()
+app = FastAPI()
 
-@router.on_event("startup")
+@app.on_event("startup")
 async def startup_event():
-    logging.info('应用启动')
+    app.warning_sent = False
 
-@router.on_event("shutdown")
+@app.on_event("shutdown")
 async def shutdown_event():
-    logging.info('应用关闭')
+    logging.info('滚！')
+    app.warning_sent = False
 
-@router.get("/")
+@app.get("/")
 async def get_root(request: Request):
     group_id = request.query_params.get("group_id") 
     if group_id:
@@ -35,7 +36,7 @@ async def get_root(request: Request):
         return {"Error": "需要组 ID"}
 
 # 主逻辑路由
-@router.post("/")
+@app.post("/")
 async def root_handler(request: Request):
     try:
         data = await request.json()
@@ -103,3 +104,7 @@ async def root_handler(request: Request):
     except Exception as e:
         logging.exception("发生错误: %s", str(e))
         return {"error": f"Error: {str(e)}"}
+
+# FastAPI,启动!
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
