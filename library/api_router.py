@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from logger import setup_logging
 from ai_handler import call_ai_api
-from onebot_handler import send_image_to_onebot, send_get_request
+from send_group_msg import send_image_to_onebot, send_get_request
 from image_handler import create_image
 import uvicorn
 import yaml
@@ -76,6 +76,7 @@ async def root_handler(request: Request):
                         break  # 跳出循环，不再处理其他消息
 
         if not command_called:
+            target_qq = '3565439736'
             # 只有在命令未被调用时才调用AI
             logging.info("AI:true")
             data["AI"] = True
