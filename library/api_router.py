@@ -8,7 +8,7 @@ import yaml
 import requests
 import os
 
-# 加载配置文件
+# 加载配置文件 123
 def load_config():
     with open("config/main.yml", "r") as file:
         return yaml.safe_load(file)
